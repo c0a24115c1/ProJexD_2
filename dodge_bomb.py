@@ -29,7 +29,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 """
-def init_kk_imgs() -> tuple[list[pg.Surface],list[init]]:
+def init_kk_imgs(rct: kk_img) -> tuple[list[pg.Surface],list[init]]:
     kk_dict={
         (+5,0):rotozoom(kk_img,0,0.9),
         (-5,0):rotozoom(kk_img2,0,0.9),
@@ -42,8 +42,8 @@ def init_kk_imgs() -> tuple[list[pg.Surface],list[init]]:
         (0,-5):rotozoom(kk_img,90,0.9),
         (0,+5):rotozoom(kk_img2,90,0.9)
     }
-
 """
+
 
 def gameover(screen: pg.Surface) -> None:
     sikaku = pg.Surface((WIDTH,HEIGHT))
@@ -68,7 +68,16 @@ def gameover(screen: pg.Surface) -> None:
     pg.display.update()
     time.sleep(5)
 
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs=[]
+    bb_accs = [a for a in range(1, 11)]
 
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_imgs.append(bb_img)
+    
+    return bb_imgs,bb_accs
 
 
     
@@ -92,7 +101,15 @@ def main():
     vx, vy = +5, +5  # 爆弾の速度
     clock = pg.time.Clock()
     tmr = 0
+
+    
+    
+
     while True:
+        bb_imgs,bb_accs=init_bb_imgs()
+        avx = vx*bb_accs[min(tmr//500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]
+
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
@@ -108,6 +125,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  # 横方向の移動量を加算
                 sum_mv[1] += mv[1]  # 縦方向の移動量を加算
+                #init_kk_imgs(sum_mv)
         # if key_lst[pg.K_w]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_UP]:
