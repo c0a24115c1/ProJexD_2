@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame as pg
+import time
 
 
 WIDTH, HEIGHT = 1100, 650
@@ -27,12 +28,59 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+"""
+def init_kk_imgs() -> tuple[list[pg.Surface],list[init]]:
+    kk_dict={
+        (+5,0):rotozoom(kk_img,0,0.9),
+        (-5,0):rotozoom(kk_img2,0,0.9),
+
+        (+5,-5):rotozoom(kk_img,45,0.9),
+        (+5,+5):rotozoom(kk_img,315,0.9),
+        (-5,+5):rotozoom(kk_img2,225,0.9),
+        (-5,-5):rotozoom(kk_img2,135,0.9),
+
+        (0,-5):rotozoom(kk_img,90,0.9),
+        (0,+5):rotozoom(kk_img2,90,0.9)
+    }
+
+"""
+
+def gameover(screen: pg.Surface) -> None:
+    sikaku = pg.Surface((WIDTH,HEIGHT))
+    pg.draw.rect(sikaku,(0,0,0), (0, 0, WIDTH,HEIGHT))
+    sikaku.set_alpha(255)
+    fonto = pg.font.Font(None, 80)
+    moji = fonto.render("GAME OVER",True, (255, 255, 255))
+    moji_rct = moji.get_rect()
+    moji_rct.center = 550, 325
+    sikaku.blit(moji, (moji_rct))
+    
+    naku = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
+    migi = naku.get_rect()
+    migi.center = 350, 325
+    sikaku.blit(naku,migi)
+
+    hidari = naku.get_rect()
+    hidari.center =750, 325
+    sikaku.blit(naku,hidari)
+
+    screen.blit(sikaku,[0,0])
+    pg.display.update()
+    time.sleep(5)
+
+
+
+
+    
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+    #kk_img2 = pg.transform.flip(kk_img, True, False)
+
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
     bb_img = pg.Surface((20, 20))  # 爆弾用の空Surface
@@ -51,6 +99,7 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             return
 
         key_lst = pg.key.get_pressed()
