@@ -46,29 +46,35 @@ def init_kk_imgs(rct: kk_img) -> tuple[list[pg.Surface],list[init]]:
 
 
 def gameover(screen: pg.Surface) -> None:
+    """
+    ゲームオーバー画面
+    """
     sikaku = pg.Surface((WIDTH,HEIGHT))
-    pg.draw.rect(sikaku,(0,0,0), (0, 0, WIDTH,HEIGHT))
-    sikaku.set_alpha(255)
+    pg.draw.rect(sikaku,(0,0,0), (0, 0, WIDTH,HEIGHT))#色、位置の指定
+    sikaku.set_alpha(255)#不透明度の指定
     fonto = pg.font.Font(None, 80)
-    moji = fonto.render("GAME OVER",True, (255, 255, 255))
+    moji = fonto.render("GAME OVER",True, (255, 255, 255))#
     moji_rct = moji.get_rect()
-    moji_rct.center = 550, 325
+    moji_rct.center = 550, 325#場所の指定
     sikaku.blit(moji, (moji_rct))
     
     naku = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
     migi = naku.get_rect()
-    migi.center = 350, 325
-    sikaku.blit(naku,migi)
+    migi.center = 350, 325#場所の指定
+    sikaku.blit(naku,migi)#黒画面にこうかとんを配置
 
     hidari = naku.get_rect()
-    hidari.center =750, 325
-    sikaku.blit(naku,hidari)
+    hidari.center =750, 325#場所の指定
+    sikaku.blit(naku,hidari)#黒画面にこうかとんを配置
 
     screen.blit(sikaku,[0,0])
     pg.display.update()
     time.sleep(5)
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    """
+    玉をでかくする、早くする
+    """
     bb_imgs=[]
     bb_accs = [a for a in range(1, 11)]
 
